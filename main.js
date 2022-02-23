@@ -105,8 +105,15 @@ function playerWins(name) {
     return $winsTitle
 }
 function createReloadButton(){
-    const $reload = createElement('div', 'reloadWrap');
-    const $reloadButton = createElement('button','.reloadWrap');
+    const $reloadDiv = createElement('div', 'reloadWrap');
+    const $reloadButton = createElement('button','button');
+    $reloadButton.innerText = 'Reload';
+    $reloadButton.addEventListener('click',function (){
+        window.location.reload()
+    })
+
+    $reloadDiv.appendChild($reloadButton);
+    $arenas.appendChild($reloadButton)
 }
 $arenas.appendChild(createPlayer(player1));
 $arenas.appendChild(createPlayer(player2));
@@ -118,9 +125,10 @@ $randomButton.addEventListener('click', function () {
     player1.renderHP();
     player2.renderHP();
 
-    if (player1.hp === 0 || player2.hp === 0)
+    if (player1.hp === 0 || player2.hp === 0) {
         $randomButton.disabled = true;
-
+        createReloadButton();
+    }
     if (player1.hp === 0 && player1.hp < player2.hp) {
         $arenas.appendChild(playerWins(player2.name));
     } else if (player2.hp === 0 && player2.hp < player1.hp) {
