@@ -1,54 +1,70 @@
-const scorpion = {
+import { createPlayer } from "./createplayers.js";
+import { generateLogs } from "./generatelogs.js";
+import { checkWin } from "./declareWinner.js";
+import { changeHP, renderHP, elHP } from "./players.js";
+import { enemyAttack, playerAttack } from "./fight.js";
+
+const $arenas = document.querySelector('.arenas');
+const $form = document.querySelector('.control');
+
+const player1 = {
+    player: 1,
     name: 'Scorpion',
     hp: 100,
     img: './assets/scorpion.gif',
-    weapon: ['sword', 'shuriken', 'spear'],
-    attack: function() {
-        console.log(this.name + ', Fight...')
-    }
-}
+    weapon: [],
+    attack: function () {
+        console.log(player1.name + ' Fight ...');
+    },
+    changeHP,
+    renderHP,
+    elHP,
+};
 
-const kitana = {
+const player2 = {
+    player: 2,
     name: 'Kitana',
-    hp: 95,
+    hp: 100,
     img: './assets/kitana.gif',
-    weapon: ['sword', 'spear'],
-    attack: function() {
-        console.log(this.name + ', Fight...')
+    weapon: [],
+    attack: function () {
+        console.log(player2.name + ' Fight ...');
+    },
+    changeHP,
+    renderHP,
+    elHP,
+};
+
+$form.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const enemy = enemyAttack();
+
+    const player = playerAttack($form);
+
+    if (enemy.defence !== player.hit) {
+        player1.changeHP(player.value);
+        player1.renderHP();
+        generateLogs('hit', player1, player2, player.value);
     }
-}
 
-const $arenas = document.querySelector('.arenas');
+    if (player.defence !== enemy.hit) {
+        player2.changeHP(enemy.value);
+        player2.renderHP();
+        generateLogs('hit', player2, player1, enemy.value);
+    }
 
-function createDivElement (element, classname) {
-    const $elem = document.createElement(element);
-    $elem.classList.add(classname);
-    return $elem;
-}
+    if (player.defence === enemy.hit) {
+        generateLogs('defence', player2, player1);
+    }
 
+    if (player.hit === enemy.defence) {
+        generateLogs('defence', player1, player2);
+    }
 
-function createPlayer (elem, classname, obj) {
+    checkWin(player1, player2, $arenas);
+})
 
-    elem.appendChild(createDivElement('div', classname));
-
-    const $player = document.querySelector(`div.${classname}`);
-    $player.appendChild(createDivElement('div',  `progressbar`));
-    $player.appendChild(createDivElement('div',  `character`));
-
-    const $progressbar =document.querySelector(`div.${classname} div.progressbar`);
-    $progressbar.appendChild(createDivElement('div', `life`));
-    $progressbar.appendChild(createDivElement('div', `name`));
-
-    const $life = document.querySelector(`div.${classname} div.life`);
-    $life.style.width = `${obj.hp}%`;
-
-    const $name = document.querySelector(`div.${classname} div.name`);
-    $name.innerText = obj.name;
-
-    const $img = document.createElement('img');
-    $img.src = obj.img;
-    document.querySelector(`div.${classname} div.character`).appendChild($img);
-
-}
-createPlayer($arenas, 'player1', scorpion)
-createPlayer($arenas, 'player2', kitana)
+generateLogs('start', player1, player2);
+$arenas.appendChild(createPlayer(player1));
+$arenas.appendChild(createPlayer(player2));
