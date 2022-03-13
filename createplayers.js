@@ -1,6 +1,6 @@
 import { createElement } from "./utils.js";
 
-export function createplayers(playerData) {
+export function createPlayer(playerData) {
     const { player, name, hp, img } = playerData;
 
     const $player = createElement('div', 'player' + player);

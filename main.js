@@ -9,9 +9,9 @@ const $form = document.querySelector('.control');
 
 const player1 = {
     player: 1,
-    name: 'Liukang',
+    name: 'Scorpion',
     hp: 100,
-    img: 'http://reactmarathon-api.herokuapp.com/assets/liukang.gif',
+    img: './assets/scorpion.gif',
     weapon: [],
     attack: function () {
         console.log(player1.name + ' Fight ...');
@@ -23,9 +23,9 @@ const player1 = {
 
 const player2 = {
     player: 2,
-    name: 'Scorpion',
+    name: 'Kitana',
     hp: 100,
-    img: 'http://reactmarathon-api.herokuapp.com/assets/scorpion.gif',
+    img: './assets/kitana.gif',
     weapon: [],
     attack: function () {
         console.log(player2.name + ' Fight ...');
