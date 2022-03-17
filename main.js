@@ -1,8 +1,9 @@
 import { createPlayer } from "./createplayers.js";
-import { generateLogs } from "./generatelogs.js";
 import { checkWin } from "./declareWinner.js";
 import { changeHP, renderHP, elHP } from "./players.js";
 import { enemyAttack, playerAttack } from "./fight.js";
+import {logs} from "./generatelogs"
+import {getRandomInt} from "./utils";
 
 const $arenas = document.querySelector('.arenas');
 const $form = document.querySelector('.control');
@@ -35,6 +36,32 @@ const player2 = {
     elHP,
 };
 
+function getTime() {
+    const date = new Date();
+    return `${date.getHours()}:${date.getMinutes()}`;
+}
+
+function getTextLog(type,playerName1, playerName2){
+    switch (type){
+        case 'start':
+            return LOGS[type]
+                .replace('[player1]',playerName1)
+                .replace('[player2]',playerName2)
+                .replace('[time]', getTime());
+            break;
+        case 'hit':
+            return logs[type][getRandomInt(logs[type].length - 1) - 1]
+    }
+}
+
+function generateLogs(type, player1, player2){
+    const text = getTextLog(type,player1.name,player2.name);
+    console.log(text);
+    const el = `<p>${text}</p>`;
+    $form.insertAdjacentHTML('afterbegin', el);
+}
+
+
 $form.addEventListener('submit', function (e) {
     e.preventDefault();
 
@@ -65,6 +92,8 @@ $form.addEventListener('submit', function (e) {
     checkWin(player1, player2, $arenas);
 })
 
-generateLogs('start', player1, player2);
-$arenas.appendChild(createPlayer(player1));
-$arenas.appendChild(createPlayer(player2));
+function init(){generateLogs('start', player1, player2);
+    $arenas.appendChild(createPlayer(player1));
+    $arenas.appendChild(createPlayer(player2));
+}
+init()
